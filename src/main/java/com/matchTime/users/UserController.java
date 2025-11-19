@@ -12,11 +12,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
-    }
-
     @PostMapping("/users")
     public Long save(@RequestBody UserCreateRequestDto requestDto) {
         return userService.save(requestDto);
