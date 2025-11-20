@@ -1,0 +1,14 @@
+app = "matchtime-app"
+
+[build]
+
+[env]
+SPRING_PROFILES_ACTIVE = "prod"
+
+[[mounts]]
+source="db_volume"
+destination="/data"
+
+[http_service]
+internal_port = 8080
+force_https = false
