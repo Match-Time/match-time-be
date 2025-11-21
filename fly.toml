@@ -1,14 +1,24 @@
-app = "matchtime-app"
+# fly.toml app configuration file generated for matchtime-app-purple-firefly-5004 on 2025-11-22T02:12:34+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'matchtime-app-purple-firefly-5004'
+primary_region = 'nrt'
 
 [build]
 
 [env]
-SPRING_PROFILES_ACTIVE = "prod"
+  SPRING_PROFILES_ACTIVE = 'prod'
 
 [[mounts]]
-source="db_volume"
-destination="/data"
+  source = 'data'
+  destination = '/data'
 
 [http_service]
-internal_port = 8080
-force_https = false
+  internal_port = 8080
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

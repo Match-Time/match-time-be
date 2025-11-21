@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PersonalAvailabilityService {
@@ -37,7 +39,8 @@ public class PersonalAvailabilityService {
 
         // 새 값 저장
         if (request.getDates() != null) {
-            for (String d : request.getDates()) {
+            Set<String> uniqueDates = new LinkedHashSet<>(request.getDates());
+            for (String d : uniqueDates) {
                 LocalDate date = LocalDate.parse(d);
                 monthlyRepo.save(new MonthlyUnavailable(null, user, date));
             }
@@ -68,7 +71,8 @@ public class PersonalAvailabilityService {
         monthlyRepo.deleteByUserAndRoom(user, room);
 
         if (request.getDates() != null) {
-            for (String d : request.getDates()) {
+            Set<String> uniqueDates = new LinkedHashSet<>(request.getDates());
+            for (String d : uniqueDates) {
                 LocalDate date = LocalDate.parse(d);
                 monthlyRepo.save(new MonthlyUnavailable(room, user, date));
             }
