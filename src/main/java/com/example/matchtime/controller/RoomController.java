@@ -3,6 +3,7 @@ package com.example.matchtime.controller;
 import com.example.matchtime.dto.RoomJoinRequest;
 import com.example.matchtime.dto.ConfirmRequest;
 import com.example.matchtime.dto.RoomCreateRequest;
+import com.example.matchtime.dto.RoomUpdateRequest;
 import com.example.matchtime.model.Room;
 import com.example.matchtime.model.User;
 import com.example.matchtime.service.RoomService;
@@ -41,6 +42,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getRoom(roomId));
     }
 
+    @PutMapping("/rooms/{roomId}")
+    public ResponseEntity<Room> updateRoomName(@PathVariable Long roomId,
+                                               @Valid @RequestBody RoomUpdateRequest request) {
+        return ResponseEntity.ok(roomService.updateRoomName(roomId, request.getName()));
+    }
+
     @GetMapping("/rooms/{roomId}/users")
     public ResponseEntity<List<User>> getRoomUsers(@PathVariable Long roomId) {
         return ResponseEntity.ok(roomService.getUsersInRoom(roomId));
@@ -56,6 +63,12 @@ public class RoomController {
     public ResponseEntity<?> leaveRoom(@PathVariable Long roomId, @PathVariable Long userId) {
         roomService.removeUserFromRoom(userId, roomId);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/rooms/{roomId}")
+    public ResponseEntity<?> deleteRoom(@PathVariable Long roomId) {
+        roomService.deleteRoom(roomId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/rooms/{roomId}/confirm")

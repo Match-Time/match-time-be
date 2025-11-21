@@ -36,12 +36,14 @@ public class AvailabilityService {
                 .orElseThrow(() -> new IllegalArgumentException("Room not found: " + roomId));
 
         List<User> users = roomService.getUsersInRoom(roomId);
-        if (users.isEmpty()) return List.of();
-
         int totalUsers = users.size();
+        // 추천 날짜는 2명 이상일 때만 의미 있게 제공
+        if (totalUsers <= 1) return List.of();
 
-        LocalDate start = LocalDate.now().withDayOfMonth(1);
-        LocalDate end = start.plusMonths(1).minusDays(1);
+
+        LocalDate today = LocalDate.now();
+        LocalDate start = today; // 오늘 이전 날짜는 추천에서 제외
+        LocalDate end = start.plusMonths(1).withDayOfMonth(1).plusMonths(1).minusDays(1);
 
         Map<LocalDate, Integer> availableCount = new HashMap<>();
 
@@ -62,6 +64,8 @@ public class AvailabilityService {
 
         List<RecommendedDateResponse> result =
                 availableCount.entrySet().stream()
+                        .filter(e -> e.getValue() > 0) // 모두 불가인 날짜는 제외
+                        .filter(e -> !e.getKey().isBefore(today)) // 오늘 이전 제외
                         .map(e -> new RecommendedDateResponse(
                                 e.getKey().toString(), e.getValue()
                         ))

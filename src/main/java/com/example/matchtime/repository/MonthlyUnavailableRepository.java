@@ -11,7 +11,11 @@ public interface MonthlyUnavailableRepository extends JpaRepository<MonthlyUnava
     // 개인 전체 불가능 날짜 삭제
     void deleteByUser(User user);
 
+    void deleteByUserAndRoom(User user, com.example.matchtime.model.Room room);
+
     // 개인 불가능 날짜 조회
     List<MonthlyUnavailable> findByUser(User user);
+
+    List<MonthlyUnavailable> findByUserAndRoom(User user, com.example.matchtime.model.Room room);
     
 }

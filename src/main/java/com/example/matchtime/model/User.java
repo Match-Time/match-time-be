@@ -1,5 +1,6 @@
 package com.example.matchtime.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class User {
     private String nickname;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // prevent recursion when serializing rooms
     private List<RoomUser> rooms = new ArrayList<>();
 
     public User() {}

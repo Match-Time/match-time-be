@@ -76,6 +76,11 @@ public class RoomService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
         roomUserRepository.deleteByRoomAndUser(room, user);
+
+        // If no users remain, delete the room
+        if (roomUserRepository.findByRoom(room).isEmpty()) {
+            roomRepository.delete(room);
+        }
     }
 
     @Transactional
@@ -120,6 +125,21 @@ public class RoomService {
 
         roomRepository.save(room);
     }
+
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        Room room = getRoom(roomId);
+        roomRepository.delete(room);
+    }
+
+    @Transactional
+    public Room updateRoomName(Long roomId, String name) {
+        Assert.hasText(name, "Room name must not be empty");
+        Room room = getRoom(roomId);
+        room.setName(name);
+        return roomRepository.save(room);
+    }
+
     @Transactional
     public void joinByInvite(Long userId, String inviteCode) {
 
@@ -136,6 +156,17 @@ public class RoomService {
             ru.setUser(user);
             roomUserRepository.save(ru);
         }
+    }
+
+    @Transactional
+    public List<Room> getRoomsForUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+
+        return roomUserRepository.findByUser(user)
+                .stream()
+                .map(RoomUser::getRoom)
+                .toList();
     }
 
 }
