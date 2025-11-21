@@ -1,13 +1,13 @@
-package com.matchTime;
+package com.matchtime;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MatchTimeApplication {
+public class MatchtimeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MatchTimeApplication.class, args);
+		SpringApplication.run(MatchtimeApplication.class, args);
 	}
 
 }
